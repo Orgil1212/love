@@ -1,13 +1,14 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
-const cors = require('cors');
 const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
 
-// Gmail App Password ашиглах
+// Static файлуудыг serve хийх
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Gmail App Password-г environment variable-аас авах
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -15,9 +16,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.GMAIL_PASS
   }
 });
-
-// Static файлуудыг serve хийх
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Root руу redirect
 app.get('/', (req, res) => {

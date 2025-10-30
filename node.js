@@ -1,27 +1,35 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // frontend localhost-оос хандалт хийхэд
+app.use(cors());
 
-// Gmail ашиглах бол App Password авах шаардлагатай
+// Gmail App Password ашиглах
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'orgiloorgil16@gmail.com',       // өөрийн Gmail
-    pass: 'coxx nsft xqxt dzzu'           // Gmail App Password
+    user: 'orgiloorgil16@gmail.com',     // өөрийн Gmail
+    pass: 'coxx nsft xqxt dzzu'         // Gmail App Password
   }
 });
 
+// Frontend serve
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Email API
 app.post('/send-email', async (req, res) => {
   const { recipient, subject, body } = req.body;
   try {
     await transporter.sendMail({
       from: `"Udval Page" <orgiloorgil16@gmail.com>`,
       to: recipient,
-      subject: subject,
+      subject,
       text: body
     });
     res.json({ success: true });
@@ -31,4 +39,6 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+// Render-д зориулсан порт
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));

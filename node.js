@@ -11,8 +11,8 @@ app.use(cors());
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'orgiloorgil16@gmail.com',
-    pass: 'coxx nsft xqxt dzzu'
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS
   }
 });
 
@@ -29,7 +29,7 @@ app.post('/send-email', async (req, res) => {
   const { recipient, subject, body } = req.body;
   try {
     await transporter.sendMail({
-      from: `"Udval Page" <orgiloorgil16@gmail.com>`,
+      from: `"Udval Page" <${process.env.GMAIL_USER}>`,
       to: recipient,
       subject,
       text: body

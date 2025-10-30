@@ -11,13 +11,15 @@ app.use(cors());
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'orgiloorgil16@gmail.com',     // өөрийн Gmail
-    pass: 'coxx nsft xqxt dzzu'         // Gmail App Password
+    user: 'orgiloorgil16@gmail.com',
+    pass: 'coxx nsft xqxt dzzu'
   }
 });
 
-// Frontend serve
+// Static файлуудыг serve хийх
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Root руу redirect
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -39,6 +41,5 @@ app.post('/send-email', async (req, res) => {
   }
 });
 
-// Render-д зориулсан порт
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on port ${port}`));
